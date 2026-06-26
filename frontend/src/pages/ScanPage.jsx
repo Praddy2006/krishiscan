@@ -43,23 +43,44 @@ export default function ScanPage() {
   }
 
   return (
-    <div className="max-w-lg mx-auto">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-6">Scan your soil</h2>
+    <div className="max-w-xl mx-auto">
+      {/* Header */}
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">Scan your soil</h2>
+        <p className="text-gray-500 text-sm mt-1">Upload a clear photo of your soil sample for AI analysis</p>
+      </div>
+
+      {/* Upload area */}
       <div
         onDrop={onDrop}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
         onDragLeave={() => setDragOver(false)}
         onClick={() => fileRef.current.click()}
-        className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition ${
-          dragOver ? 'border-green-500 bg-green-50' : 'border-gray-300 hover:border-green-400'
+        className={`relative border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
+          dragOver
+            ? 'border-green-500 bg-green-50 scale-[1.01]'
+            : preview
+            ? 'border-green-300 bg-green-50'
+            : 'border-gray-300 bg-white hover:border-green-400 hover:bg-gray-50'
         }`}
       >
         {preview ? (
-          <img src={preview} alt="preview" className="max-h-64 mx-auto rounded-lg object-cover" />
+          <div className="p-4">
+            <img
+              src={preview}
+              alt="preview"
+              className="w-full max-h-72 object-cover rounded-xl"
+            />
+            <p className="text-center text-xs text-green-600 mt-3 font-medium">
+              ✓ Image ready — click to change
+            </p>
+          </div>
         ) : (
-          <div className="text-gray-400">
-            <p className="text-sm">Drag and drop a soil image here</p>
-            <p className="text-xs mt-1">or click to browse</p>
+          <div className="py-16 px-8 text-center">
+            <div className="text-5xl mb-4">🪨</div>
+            <p className="text-gray-700 font-medium">Drag and drop your soil image here</p>
+            <p className="text-gray-400 text-sm mt-1">or click to browse</p>
+            <p className="text-gray-300 text-xs mt-4">Supports JPG, PNG, WEBP</p>
           </div>
         )}
         <input
@@ -70,13 +91,45 @@ export default function ScanPage() {
           onChange={(e) => handleFile(e.target.files[0])}
         />
       </div>
-      {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
+
+      {/* Tips */}
+      {!preview && (
+        <div className="mt-4 grid grid-cols-3 gap-3">
+          {[
+            { icon: '☀️', tip: 'Good lighting' },
+            { icon: '📐', tip: 'Close up shot' },
+            { icon: '🎯', tip: 'Clear focus' },
+          ].map(({ icon, tip }) => (
+            <div key={tip} className="bg-white border border-gray-200 rounded-lg p-3 text-center">
+              <div className="text-lg mb-1">{icon}</div>
+              <p className="text-xs text-gray-500">{tip}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-4 bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-600">
+          {error}
+        </div>
+      )}
+
       <button
         onClick={handleSubmit}
         disabled={!image || loading}
-        className="mt-6 w-full bg-green-600 text-white py-3 rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50 transition"
+        className="mt-6 w-full bg-green-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
       >
-        {loading ? 'Analysing...' : 'Analyse Soil'}
+        {loading ? (
+          <>
+            <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+            </svg>
+            Analysing your soil...
+          </>
+        ) : (
+          'Analyse Soil →'
+        )}
       </button>
     </div>
   )
