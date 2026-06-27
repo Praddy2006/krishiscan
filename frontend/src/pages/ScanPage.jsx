@@ -1,6 +1,5 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import api from '../services/api'
 
 export default function ScanPage() {
   const [image, setImage] = useState(null)
@@ -31,12 +30,20 @@ export default function ScanPage() {
     try {
       const formData = new FormData()
       formData.append('file', image)
-      const res = await api.post('/scans/soil', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+
+      const res = await fetch('http://localhost:8000/predict/soil', {
+        method: 'POST',
+        body: formData,
       })
-      navigate(`/result/${res.data.scanId}`)
+
+      if (!res.ok) throw new Error('Prediction failed')
+      const data = await res.json()
+
+      // Store result and navigate
+      sessionStorage.setItem('lastScan', JSON.stringify(data))
+      navigate('/result/latest')
     } catch (err) {
-      setError('Scan failed. Please try again.')
+      setError('Scan failed. Make sure AI service is running on port 8000.')
     } finally {
       setLoading(false)
     }
@@ -44,24 +51,24 @@ export default function ScanPage() {
 
   return (
     <div className="max-w-xl mx-auto">
-      {/* Header */}
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900">Scan your soil</h2>
-        <p className="text-gray-500 text-sm mt-1">Upload a clear photo of your soil sample for AI analysis</p>
+        <h2 className="text-2xl font-bold text-forest-800">Scan your soil</h2>
+        <p className="text-gray-500 text-sm mt-1">
+          Upload a clear photo of your soil sample for AI analysis
+        </p>
       </div>
 
-      {/* Upload area */}
       <div
         onDrop={onDrop}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true) }}
         onDragLeave={() => setDragOver(false)}
         onClick={() => fileRef.current.click()}
-        className={`relative border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
+        className={`border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
           dragOver
             ? 'border-green-500 bg-green-50 scale-[1.01]'
             : preview
-            ? 'border-green-300 bg-green-50'
-            : 'border-gray-300 bg-white hover:border-green-400 hover:bg-gray-50'
+            ? 'border-forest-300 bg-forest-50'
+            : 'border-gray-300 bg-white hover:border-forest-400 hover:bg-gray-50'
         }`}
       >
         {preview ? (
@@ -71,7 +78,7 @@ export default function ScanPage() {
               alt="preview"
               className="w-full max-h-72 object-cover rounded-xl"
             />
-            <p className="text-center text-xs text-green-600 mt-3 font-medium">
+            <p className="text-center text-xs text-forest-600 mt-3 font-medium">
               ✓ Image ready — click to change
             </p>
           </div>
@@ -92,7 +99,6 @@ export default function ScanPage() {
         />
       </div>
 
-      {/* Tips */}
       {!preview && (
         <div className="mt-4 grid grid-cols-3 gap-3">
           {[
@@ -117,7 +123,7 @@ export default function ScanPage() {
       <button
         onClick={handleSubmit}
         disabled={!image || loading}
-        className="mt-6 w-full bg-green-600 text-white py-3.5 rounded-xl text-sm font-semibold hover:bg-green-700 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+        className="mt-6 w-full bg-forest-700 text-white py-3.5 rounded-xl text-sm font-semibold hover:bg-forest-600 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
       >
         {loading ? (
           <>

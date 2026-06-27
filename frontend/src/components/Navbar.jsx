@@ -4,7 +4,8 @@ export default function Navbar() {
   const { pathname } = useLocation()
 
 const links = [
-  { to: '/scan',    label: 'Scan Soil' },
+  { to: '/scan',    label: '🪨 Soil Scan' },
+  { to: '/insect',  label: '🐛 Insect Scan' },
   { to: '/weather', label: '🌦️ Weather' },
   { to: '/history', label: 'History' },
   { to: '/login',   label: 'Login' },

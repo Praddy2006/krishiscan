@@ -8,6 +8,7 @@ import ChatPage from './pages/ChatPage'
 import Navbar from './components/Navbar'
 import PageLoader from './components/PageLoader'
 import WeatherPage from './pages/WeatherPage'
+import InsectScanPage from './pages/InsectScanPage'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/chat" element={<ChatPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="/weather" element={<WeatherPage />} />
+            <Route path="/insect" element={<InsectScanPage />} />
           </Routes>
         </PageLoader>
       </main>
