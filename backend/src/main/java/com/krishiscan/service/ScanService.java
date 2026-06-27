@@ -92,15 +92,17 @@ public class ScanService {
     }
 
     private List<String> getCropRecommendations(String soilType) {
-        if (soilType == null) return List.of();
-        return switch (soilType.toLowerCase()) {
-            case "alluvial" -> List.of("Wheat", "Rice", "Sugarcane", "Maize", "Pulses");
-            case "black"    -> List.of("Cotton", "Soybean", "Sorghum", "Groundnut", "Sunflower");
-            case "red"      -> List.of("Groundnut", "Millets", "Tobacco", "Potato", "Ragi");
-            case "laterite" -> List.of("Tea", "Coffee", "Rubber", "Cashew", "Tapioca");
-            case "sandy"    -> List.of("Watermelon", "Peanut", "Carrot", "Radish", "Sweet Potato");
-            default         -> List.of("Consult local agronomist");
-        };
+    if (soilType == null) return List.of();
+    return switch (soilType.toLowerCase()) {
+        case "alluvial_soil" -> List.of("Wheat", "Rice", "Sugarcane", "Maize", "Pulses");
+        case "black_soil"    -> List.of("Cotton", "Soybean", "Sorghum", "Groundnut", "Sunflower");
+        case "red_soil"      -> List.of("Groundnut", "Millets", "Tobacco", "Potato", "Ragi");
+        case "laterite_soil" -> List.of("Tea", "Coffee", "Rubber", "Cashew", "Tapioca");
+        case "arid_soil"     -> List.of("Bajra", "Jowar", "Moth Bean", "Cluster Bean", "Sesame");
+        case "mountain_soil" -> List.of("Apple", "Tea", "Coffee", "Barley", "Potato");
+        case "yellow_soil"   -> List.of("Rice", "Maize", "Groundnut", "Potato", "Vegetables");
+        default              -> List.of("Consult local agronomist");
+    };
     }
 
     private Map<String, String> getSoilHealth(String soilType) {

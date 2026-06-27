@@ -7,6 +7,7 @@ import HistoryPage from './pages/HistoryPage'
 import ChatPage from './pages/ChatPage'
 import Navbar from './components/Navbar'
 import PageLoader from './components/PageLoader'
+import WeatherPage from './pages/WeatherPage'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
             <Route path="/history" element={<HistoryPage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="/weather" element={<WeatherPage />} />
           </Routes>
         </PageLoader>
       </main>

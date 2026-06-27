@@ -6,7 +6,6 @@ import io
 
 router = APIRouter()
 classifier = SoilClassifier()
-SOIL_CLASSES = ["alluvial", "black", "red", "laterite", "sandy"]
 
 @router.post("/soil", response_model=SoilPredictionResponse)
 async def predict_soil(file: UploadFile = File(...)):
@@ -19,9 +18,10 @@ async def predict_soil(file: UploadFile = File(...)):
         raise HTTPException(status_code=400, detail="Could not read image")
 
     soil_type, confidence = classifier.predict(image)
+
     return SoilPredictionResponse(
         soil_type=soil_type,
         confidence=round(confidence, 4),
         all_scores={cls: round(float(score), 4)
-                    for cls, score in zip(SOIL_CLASSES, classifier.last_scores)}
+                    for cls, score in zip(classifier.classes, classifier.last_scores)}
     )

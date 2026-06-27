@@ -3,11 +3,12 @@ import { Link, useLocation } from 'react-router-dom'
 export default function Navbar() {
   const { pathname } = useLocation()
 
-  const links = [
-    { to: '/scan', label: 'Scan Soil' },
-    { to: '/history', label: 'History' },
-    { to: '/login', label: 'Login' },
-  ]
+const links = [
+  { to: '/scan',    label: 'Scan Soil' },
+  { to: '/weather', label: '🌦️ Weather' },
+  { to: '/history', label: 'History' },
+  { to: '/login',   label: 'Login' },
+]
 
   return (
     <nav className="bg-forest-800 border-b border-forest-700 px-6 py-3 sticky top-0 z-50">
